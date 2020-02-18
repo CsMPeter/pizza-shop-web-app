@@ -11,12 +11,28 @@ window.Shop = {
         });
     },
 
+    addPizzaToCart : function (pizzaId){
+      var request = {
+          customerId: 22,
+          pizzaId: pizzaId
+      };
+
+      $.ajax({
+          url: Shop.API_BASE_URL + "/carts",
+          method: "PUT",
+          contentType: "application/json",
+          data: JSON.stringify(request)
+      }).done(function () {
+          window.location.replace("cart.html");
+      })
+    },
+
     getPizzaHtml :function (pizza) {
 
-        return ` <div class="col-md-3 col-sm-6">
+        return `<div class="col-md-3 col-sm-6">
                     <div class="single-shop-product">
                         <div class="product-upper">
-                            <img src="img/product-2.jpg" alt="">
+                            <img src="${pizza.imageUrl}" alt="">
                         </div>
                         <h2><a href="">${pizza.name}</a></h2>
                         <div class="product-carousel-price">
@@ -36,7 +52,19 @@ window.Shop = {
         pizzas.forEach(pizza => pizzasHtml += Shop.getPizzaHtml(pizza));
 
         $(".single-product-area .row:first-child") .html(pizzasHtml);
+    },
+
+    bindEvents: function () {
+
+        $(".single-product-area").delegate(".add_to_cart_button","click",function (event) {
+            event.preventDefault();
+
+            let pizzaId = $(this).data("product_id");
+
+            Shop.addPizzaToCart(pizzaId);
+        });
     }
 };
 
 Shop.getPizzas();
+Shop.bindEvents();
