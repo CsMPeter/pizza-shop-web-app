@@ -48,6 +48,25 @@ window.Cart = {
         return `<a href="cart.html">Cart - <span class="cart-amount">$${cart.totalPrice}</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">${cart.totalQuantity}</span></a>`
     },
 
+    getCartSubtotal: function (cart){
+        return `
+
+                                <tr class="cart-subtotal">
+                                    <th>Cart Subtotal</th>
+                                     <td><span class="amount">$${cart.totalPrice}</span></td>
+                                        </tr>
+
+                                        <tr class="shipping">
+                                            <th>Shipping and Handling</th>
+                                            <td>Free Shipping</td>
+                                        </tr>
+
+                                        <tr class="order-total">
+                                            <th>Order Total</th>
+                                            <td><strong><span class="amount">$${cart.totalPrice}</span></strong> </td>
+                                        </tr>`
+    },
+
     getPizzaHtml :function (pizza) {
 
         return `<tr class="cart_item">
@@ -84,6 +103,7 @@ window.Cart = {
     displayPizzas : function (pizzas) {
         var pizzasHtml = "";
         var cartHtml = "";
+        var subtotalHtml = "";
         var totalPrice =0;
         var totalQuantity =0;
 
@@ -93,6 +113,8 @@ window.Cart = {
         pizzas.forEach(pizza => {totalPrice += pizza.price * pizza.quantity; totalQuantity += pizza.quantity});
 
         cartHtml += Cart.getCartTotal({totalPrice: totalPrice  , totalQuantity: totalQuantity});
+        subtotalHtml += Cart.getCartSubtotal({totalPrice: totalPrice  , totalQuantity: totalQuantity});
+        $(".cart_totals tbody").html(subtotalHtml);
         $(".site-branding-area .shopping-item:first-child").html(cartHtml);
         $(".shop_table.cart tbody") .html(pizzasHtml);
     },
